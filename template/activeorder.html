@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+<style>
+    .order-item{
+        background-color: rgb(237, 238, 237);
+        margin: 20px;
+        padding: 10px;
+        border: 1px solid silver;
+        box-shadow: 4px 4px 10px 1px silver;
+    }
+</style>
+{% endblock title %}
+
+{% block body %}
+
+{% for i in orders %}
+<div class="order-item">
+    <div class="name">
+        {{i.order_name}}
+    </div>
+    <div class="address">
+        {{i.order_location}}
+    </div>
+    <div class="order-data">
+        {{i.order_data}}
+    </div>
+</div>
+
+
+
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    
+</script>
+{% endblock scripts %}

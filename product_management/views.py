@@ -1,0 +1,84 @@
+from django.shortcuts import render, redirect
+from django.contrib.auth import logout
+from apps.product_view.models import Product,ActiveOrder
+from django.contrib.auth.decorators import login_required
+import json
+def check(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    else:
+        return redirect('alogin')
+
+def log_out(request):
+    logout(request)
+    return redirect('home')
+
+class Main_view:
+    @login_required(login_url="alogin")
+    def deshboard(request):
+        products = Product.objects.all()
+        con = {
+            'products' : products
+        }
+        return render(request, 'dashboard.html', con)
+        
+    @login_required(login_url="alogin")
+    def manage(request):
+        if request.method == "POST":
+            item = Product.objects.get(item_name= request.POST['item_name'])
+            if request.POST['select'] == "Add":
+                item.available += int(request.POST['amount'])
+                item.total_amount += int(request.POST['amount'])
+            else:
+                item.available -= int(request.POST['amount'])
+                item.total_amount -= int(request.POST['amount'])
+            item.save()
+        items = Product.objects.values_list('item_name', flat=True)
+        items_amount = Product.objects.values_list('available', flat=True)
+        json_data = json.dumps(list(items))
+        json_data_availble = json.dumps(list(items_amount))
+        return render(request, 'manage.html',{
+            'items': json_data,
+            'availble' : json_data_availble,
+            })
+
+    @login_required(login_url="alogin")
+    def add(request):
+        if request.method == "POST":
+            new_item = Product()
+            new_item.item_name = request.POST['product_name']
+            new_item.total_amount = request.POST['total_amount']
+            new_item.available = request.POST['availble']
+            new_item.on_order = request.POST['on_order']
+            new_item.save()
+        return render(request, 'add.html',)
+    @login_required(login_url="alogin")
+    def activeOrders(request):
+        data = ActiveOrder.objects.all()
+        print(data[0]._meta.get_fields())
+        return render(request, 'activeorder.html', {'orders' : data})
+    
+    @login_required(login_url="alogin")
+    def order(request):
+        if request.method == "POST":
+            print(request.POST)
+            data = json.loads(request.POST['add_data'])
+            for i in data:
+
+                my_object = Product.objects.get(item_name=i[0])
+                my_object.available -= int(i[1])
+                my_object.on_order += int(i[1])
+                my_object.save()
+            new = ActiveOrder()
+            new.order_name = request.POST['name']
+            new.order_location = request.POST['address']
+            new.order_data = data
+            new.save()
+        items = Product.objects.values_list('item_name', flat=True)
+        items_amount = Product.objects.values_list('available', flat=True)
+        json_data = json.dumps(list(items))
+        json_data_availble = json.dumps(list(items_amount))
+        return render(request, 'order.html', {
+            'items': json_data,
+            'availble' : json_data_availble,
+            }) 
