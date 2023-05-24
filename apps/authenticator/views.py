@@ -9,7 +9,7 @@ from django.urls import reverse
 def index(request):
 
     if request.user.is_authenticated:
-        return HttpResponse("Logged IN")
+        return redirect('home')
     else:
         if request.method == 'POST':
             username = request.POST['username']
