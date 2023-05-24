@@ -1,14 +1,14 @@
 {
-      "builds": [
-        {
-          "src": "product_management/wsgi.py",
-          "use": "@vercel/python"
-        }
-      ],
-      "routes": [
-        {
-          "src": "/(.*)",
-          "dest": "product_management/wsgi.py"
-        }
-      ]
-  }
+  "builds": [
+    {
+      "src": "product_management/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "product_management/wsgi.py"
+    }
+  ]
+}
