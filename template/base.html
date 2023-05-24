@@ -5,14 +5,122 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Product Management</title>
-    <base href="/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     {% load static %}
-    <link type="text/css" href="gallery/base.css">
-    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .top-section {
+            width: 100%;
+            height: 100px;
+        }
+
+        .top-section-left {
+            font-size: 40px;
+            font-family: cursive;
+            margin-left: 20px;
+            padding-top: 20px;
+        }
+
+        .base-main-container {
+            width: 100%;
+            height: 89vh;
+            background-color: rgb(253, 253, 253);
+            display: flex;
+        }
+
+        .left-nav {
+            width: 22%;
+            background-color: rgb(212, 211, 211);
+            height: 89vh;
+            padding-top: 20px;
+
+        }
+
+        .dash-logo img {
+            height: 120px;
+            width: auto;
+            margin-left: 25%;
+
+        }
+
+        .body-container {
+            height: 89vh;
+            overflow: scroll;
+            width: 78%;
+        }
+
+        .nav-item-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-item {
+            width: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 5px;
+            padding-left: 30px;
+            color: black;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            border-bottom: 1px solid silver;
+        }
+
+        .nav-item:hover {
+            background-color: #46b4e7;
+
+        }
+
+        .active {
+            background-color: #11a9f0;
+            pointer-events: none;
+        }
+
+        @media screen and (max-width:1000px) {
+            .left-nav {
+                position: absolute;
+                left: -100%;
+            }
+
+            .top-section-left {
+                font-size: 7vh;
+            }
+
+            .body-container {
+                width: 100%;
+            }
+
+            .order-body {
+                width: 90% !important;
+            }
+        }
+
+        .ham-burger {
+            position: absolute;
+            right: 30px;
+            top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .ham {
+            display: block;
+            width: 20px;
+            height: 3px;
+            background-color: #11a9f0;
+        }
+    </style>
+
     {% block title %}
-      
+
     {% endblock title %}
 </head>
 
@@ -30,12 +138,12 @@
     <div class="base-main-container">
         <div class="left-nav">
             <div class="dash-logo">
-                <img src="{% static 'gallery/dashboard.png' %}" alt="">
+                <img src="https://img.freepik.com/free-icon/pie-chart_318-372376.jpg" alt="">
             </div>
             <div class="nav-item-box">
                 <a href="dashboard" id="dashboard" class="nav-item">Dashboard</a>
                 <a href="manage" id="manage" class="nav-item">Manage Products</a>
-                <a href="add"id="add" class="nav-item">Add New Products</a>
+                <a href="add" id="add" class="nav-item">Add New Products</a>
                 <a href="activeorders" id="activeorders" class="nav-item">Active Orders </a>
                 <a href="order" id="order" class="nav-item">Create supply</a>
             </div>
@@ -56,17 +164,106 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 </body>
-<script type="text/javascript" src="gallery/main.js"></script>
+<script>
+
+    function autocomplete(inp, arr) {
+
+        var currentFocus;
+
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            closeAllLists();
+
+            if (!val) { return false; }
+            currentFocus = -1;
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            this.parentNode.appendChild(a);
+
+
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    b = document.createElement("DIV");
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    b.innerHTML += "<input  type='hidden' value='" + arr[i] + "'>";
+
+                    var availbe_amounts = JSON.parse(localStorage.availble);
+                    var index = arr.indexOf(arr[i])
+                    var amount = availbe_amounts[index]
+
+                    b.innerHTML += "<b>(" + amount + ")</b>"
+                    b.addEventListener("click", function (e) {
+                        inp.value = this.getElementsByTagName("input")[0].value;
+
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+
+            if (x) x = x.getElementsByTagName("div");
+
+            if (e.keyCode == 40) {
+
+                currentFocus++;
+                addActive(x);
+
+            } else if (e.keyCode == 38) {
+                currentFocus--;
+                addActive(x);
+
+            } else if (e.keyCode == 13) {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+
+        function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+
+        function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+</script>
 <script>
     var my_location = location.href
     my = (my_location.split("/"))
-    last_url = my[my.length-1]
+    last_url = my[my.length - 1]
     document.getElementById(`${last_url}`).classList.add('active')
-    
-   </script>
-   
-   {% block scripts %}
-    
-   {% endblock scripts %}
-    
+
+</script>
+
+{% block scripts %}
+
+{% endblock scripts %}
+
 </html>
