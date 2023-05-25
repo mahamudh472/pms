@@ -101,21 +101,60 @@
             }
         }
 
-        .ham-burger {
-            position: absolute;
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            -webkit-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            background-color: #11a9f0;
+        }
+
+        @media(max-width:768px) {
+            .hamburger {
+                position: absolute;
             right: 30px;
             top: 40px;
             display: flex;
             flex-direction: column;
             gap: 5px;
             cursor: pointer;
-        }
+                display: block;
+            }
 
-        .ham {
-            display: block;
-            width: 20px;
-            height: 3px;
-            background-color: #11a9f0;
+            .hamburger.active1 .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active1 .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active1 .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .nav-item-box {
+                position: fixed;
+                left: -100%;
+                top: 100px;
+                gap: 0;
+                flex-direction: column;
+                background-color: rgb(150, 222, 130);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+            }
+            .nav-item-box.active1{
+                left: 0;
+            }
         }
     </style>
 
@@ -128,17 +167,17 @@
     {% for message in messages %}
     <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
         {{ message }}
-        
-      </div>
-    
+
+    </div>
+
     {% endfor %}
     <div class="top-section">
         <div class="top-section-left">
             Product Management System
         </div>
         <div class="top-section-right">
-            <div class="ham-burger">
-                <span class="ham"></span><span class="ham"></span><span class="ham"></span>
+            <div class="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
             </div>
         </div>
     </div>
@@ -267,6 +306,18 @@
     last_url = my[my.length - 1]
     document.getElementById(`${last_url}`).classList.add('active')
 
+</script>
+<script>
+    const hamburger = document.querySelector('.hamburger')
+    const navMenu = document.querySelector('.nav-item-box')
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle("active1")
+        navMenu.classList.toggle("active1")
+    })
+    document.querySelectorAll(".nav-item").forEach(n => n.addEventListener('click', () => {
+        hamburger.classList.remove('active1')
+        navMenu.classList.remove('active1')
+    }))
 </script>
 
 {% block scripts %}
