@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.contrib import messages
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -18,6 +18,10 @@ def index(request):
             if user is not None:
                 login(request, user)
                 return redirect('home')
+            else:
+                messages.add_message(request, messages.WARNING, "Wrong username or password!")
+                return redirect('alogin')
+
         else:
             return render(request, 'login.html')
 def next(request):

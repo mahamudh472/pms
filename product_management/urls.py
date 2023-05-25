@@ -29,5 +29,6 @@ urlpatterns = [
     path('add', views.Main_view.add, name='add'),
     path('activeorders', views.Main_view.activeOrders, name='activeorders'),
     path('order', views.Main_view.order, name='order'),
+    path('done/<slug>', views.Main_view.order_complete),
 
 ] + static('/static/', document_root=settings.MEDIA_ROOT)

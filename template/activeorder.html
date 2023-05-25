@@ -9,6 +9,12 @@
         padding: 10px;
         border: 1px solid silver;
         box-shadow: 4px 4px 10px 1px silver;
+        position: relative;
+    }
+    .complete-order{
+        position: absolute;
+        right: 20px;
+        top: 15px;
     }
 </style>
 {% endblock title %}
@@ -25,7 +31,9 @@
     </div>
     <div class="order-data">
         {{i.order_data}}
+        
     </div>
+    <a class="complete-order" href="done/{{i.order_id}}" onclick="return confirm('Are you sure?')">order completed</a>
 </div>
 
 

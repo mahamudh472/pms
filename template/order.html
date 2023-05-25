@@ -103,7 +103,7 @@
 
 {% block body %}
 <div class="order-main-container">
-    <form action="order" method="post" onsubmit="return 'Confirm order'">
+    <form action="order" method="post" onsubmit="return confirm('Confirm order!')">
         {% csrf_token %}
     <div class="order-name-section">
         <input type="text" id="name" placeholder="Customer Name" name="name" required>

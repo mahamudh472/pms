@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from apps.product_view.models import Product,ActiveOrder
 from django.contrib.auth.decorators import login_required
 import json
+from django.contrib import messages
 def check(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -55,13 +56,13 @@ class Main_view:
     @login_required(login_url="alogin")
     def activeOrders(request):
         data = ActiveOrder.objects.all()
-        print(data[0]._meta.get_fields())
+        
         return render(request, 'activeorder.html', {'orders' : data})
     
     @login_required(login_url="alogin")
     def order(request):
         if request.method == "POST":
-            print(request.POST)
+            
             data = json.loads(request.POST['add_data'])
             for i in data:
 
@@ -74,6 +75,7 @@ class Main_view:
             new.order_location = request.POST['address']
             new.order_data = data
             new.save()
+            messages.add_message(request, messages.INFO, "Order sucsessfully created")
         items = Product.objects.values_list('item_name', flat=True)
         items_amount = Product.objects.values_list('available', flat=True)
         json_data = json.dumps(list(items))
@@ -82,3 +84,16 @@ class Main_view:
             'items': json_data,
             'availble' : json_data_availble,
             }) 
+    @login_required(login_url="alogin")
+    def order_complete(request, slug):
+        order = ActiveOrder.objects.get(order_id=slug)
+        order_details = eval(order.order_data)
+        for i in order_details:
+            item = Product.objects.get(item_name=i[0])
+            item.available += int(i[1])
+            item.on_order -= int(i[1])
+            item.save()
+            
+        order.delete()
+        messages.add_message(request, messages.INFO, "Order completed")
+        return redirect('dashboard')
