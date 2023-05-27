@@ -27,13 +27,13 @@
         {{i.order_name}}
     </div>
     <div class="address">
-        {{i.order_location}}
+        {{i.order_location}}, {{i.contact}}
     </div>
     <div class="order-data">
         {{i.order_data}}
         
     </div>
-    <a class="complete-order" href="done/{{i.order_id}}" onclick="return confirm('Are you sure?')">order completed</a>
+    <a class="complete-order" href="done/{{i.order_id}}" onclick="return confirm('Are you sure?')">Complete order</a>
 </div>
 
 

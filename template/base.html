@@ -4,9 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Product Management</title>
+    <title>Proyojon Decorator & Enterprise</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="icon" href="https://scontent.fdac96-1.fna.fbcdn.net/v/t39.30808-6/304773657_493310262799667_496919713049606245_n.jpg?_nc_cat=111&cb=99be929b-3346023f&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeET3uDFttW3Tc_pMT6GO0zsbMtjidltwvtsy2OJ2W3C-58szKuJ-VbYb6paeyVFx5lc7VnOqBEnIbm_7avlQ8to&_nc_ohc=MAr6v1wUxLYAX-25kEC&_nc_zt=23&_nc_ht=scontent.fdac96-1.fna&oh=00_AfCY9WWVOkkE9mabYP1KFlDJc1KyWPxpbJuvD1sZBJG2RQ&oe=64759EA5" type="image/x-icon">
     {% load static %}
     <style>
         * {
@@ -101,7 +102,7 @@
             }
         }
 
-        
+
         .hamburger {
             display: none;
             cursor: pointer;
@@ -120,12 +121,12 @@
         @media(max-width:768px) {
             .hamburger {
                 position: absolute;
-            right: 30px;
-            top: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
+                right: 30px;
+                top: 40px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                cursor: pointer;
                 display: block;
             }
 
@@ -153,7 +154,8 @@
                 transition: 0.3s;
                 z-index: 1;
             }
-            .nav-item-box.active1{
+
+            .nav-item-box.active1 {
                 left: 0;
             }
         }
@@ -166,7 +168,7 @@
 
 <body>
     {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
         {{ message }}
 
     </div>
@@ -174,7 +176,7 @@
     {% endfor %}
     <div class="top-section">
         <div class="top-section-left">
-            Product Management System
+            Proyojon Decorator & Enterprise
         </div>
         <div class="top-section-right">
             <div class="hamburger">

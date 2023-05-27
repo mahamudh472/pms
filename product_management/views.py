@@ -28,11 +28,20 @@ class Main_view:
         if request.method == "POST":
             item = Product.objects.get(item_name= request.POST['item_name'])
             if request.POST['select'] == "Add":
+                 
                 item.available += int(request.POST['amount'])
                 item.total_amount += int(request.POST['amount'])
+                messages.add_message(request, messages.INFO, f"{request.POST['amount']} {item.item_name}'s add successfuly ")
+
             else:
-                item.available -= int(request.POST['amount'])
-                item.total_amount -= int(request.POST['amount'])
+                if int(request.POST['amount'])<= item.available:
+                    item.available -= int(request.POST['amount'])
+                    item.total_amount -= int(request.POST['amount'])
+                    messages.add_message(request, messages.INFO, f"{request.POST['amount']} {item.item_name}'s removed successfuly ")
+                else:
+                    messages.add_message(request, messages.WARNING, "Not Enough Items, Check the amount and submit again.")
+
+
             item.save()
         items = Product.objects.values_list('item_name', flat=True)
         items_amount = Product.objects.values_list('available', flat=True)
@@ -49,9 +58,11 @@ class Main_view:
             new_item = Product()
             new_item.item_name = request.POST['product_name']
             new_item.total_amount = request.POST['total_amount']
-            new_item.available = request.POST['availble']
             new_item.on_order = request.POST['on_order']
+            new_item.available = int(request.POST['total_amount']) - int(request.POST['on_order'])
             new_item.save()
+            messages.add_message(request, messages.INFO, f"{new_item.item_name} add successfuly ")
+
         return render(request, 'add.html',)
     @login_required(login_url="alogin")
     def activeOrders(request):
@@ -73,6 +84,7 @@ class Main_view:
             new = ActiveOrder()
             new.order_name = request.POST['name']
             new.order_location = request.POST['address']
+            new.contact = request.POST['contact']
             new.order_data = data
             new.save()
             messages.add_message(request, messages.INFO, "Order sucsessfully created")
@@ -93,7 +105,7 @@ class Main_view:
             item.available += int(i[1])
             item.on_order -= int(i[1])
             item.save()
-            
+        messages.add_message(request, messages.INFO, f"Order of {order.order_name} completed successfully.")
         order.delete()
-        messages.add_message(request, messages.INFO, "Order completed")
+        
         return redirect('dashboard')

@@ -8,6 +8,7 @@
     .form-title{
         font-size: 30px;
         font-weight: bold;
+        color: rgb(69, 81, 241);
 
     }
     input[type=text]{
@@ -35,9 +36,8 @@
         {% csrf_token %}
         <input type="text" placeholder="Product Name" name="product_name"  required>
         <input type="text" placeholder="Product quantity" name="total_amount" required>
-        <input type="text" placeholder="Availble" name="availble" value="0" required>
-        <input type="text" placeholder="On order" name="on_order" value="0" required>
-        <input type="submit" value="Submit" class="sub-btn">
+        <input type="text" placeholder="On order" name="on_order" required>
+        <input type="submit" value="Submit" class="sub-btn btn btn-success">
     </form>
 </div>
 {% endblock %}

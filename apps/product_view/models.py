@@ -18,6 +18,7 @@ class Product(models.Model):
 class ActiveOrder(models.Model):
     order_name = models.CharField(max_length=100, null=True, default="")
     order_location = models.CharField(max_length=200, null=True, default="")
+    contact = models.CharField(max_length=15, null=True, default="")
     order_data = models.TextField()
     order_id = AutoSlugField(populate_from='order_name', null=True, default=None, unique=True)
     def __str__(self) -> str:
