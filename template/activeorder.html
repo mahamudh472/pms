@@ -21,6 +21,7 @@
 
 {% block body %}
 
+{% if orders %}
 {% for i in orders %}
 <div class="order-item">
     <div class="name">
@@ -34,12 +35,15 @@
         
     </div>
     <a class="complete-order" href="done/{{i.order_id}}" onclick="return confirm('Are you sure?')">Complete order</a>
+
 </div>
 
 
 
 {% endfor %}
-
+{% else %}
+    No active orders
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
